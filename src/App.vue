@@ -76,29 +76,8 @@
 
       });
 
-      $('.table').DataTable({
-        responsive: true,
-        language: {
-          url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-        },
-        lengthMenu: [3, 6, 10, 25, 50, 75, 100]
-      });
-
     },
-
-    updated: function () {
-
-      this.$nextTick(function () {
-        $('.table').DataTable({
-          responsive: true,
-          language: {
-            url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-          },
-          lengthMenu: [3, 6, 10, 25, 50, 75, 100]
-        });
-      })
-
-    },
+    
     computed:{
         /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
             RETORNA EL USUARIO ACTUAL */

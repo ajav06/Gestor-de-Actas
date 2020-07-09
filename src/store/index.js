@@ -41,16 +41,11 @@ const auth = {
           /* 
           *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
           */
-  
-          let message = 
-            (error.response && error.response.data) || 
-            error.message || 
-            error.toString();
 
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: message
+            text: error
           });
 
         })
@@ -90,12 +85,10 @@ const auth = {
           *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
           */
 
-         let message = (error.response && error.response.data) || error.message || error.toString();
-
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: message
+            text: error
           });
 
         })

@@ -1,7 +1,7 @@
 /* 
  * URL BASE DE LAS PETICIONES REST
  */
-const API_URL = 'https://localhost:8080/api/auth/'
+const API_URL = 'https://gestor-actas.herokuapp.com/api/auth/'
 
 /* CLASE QUE LLAMA LOS SERVICIOS DE LA API */
 class AuthService {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table class="table" id="decanatos">
+        <table class="table" id="actas">
             <thead>
                 <tr>
                     <th>Tipo</th>
@@ -30,56 +30,58 @@
         },
         data() {
             return {
-                items: [
-                    new Acta(1, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 1, 'A'),
-                    new Acta(2, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 3, 'A'),
-                    new Acta(3, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 2, 'A'),
-                    new Acta(4, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 1, 'A'),
-                    new Acta(5, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 3, 'A'),
-                    new Acta(6, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 2, 'A'),
-                ]
+                items: []
             }
+        },
+        mounted(){
+            this.$nextTick(function () {
+                $('#actas').DataTable({
+                responsive: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                lengthMenu: [3, 6, 10, 25, 50, 75, 100]
+                });
+            })
+
+            ActaDataService
+                .list()
+                .then(response => {
+                    this.items = response.data
+                }, error => {
+
+                    /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
         },
         methods:{
             cargarDatos(){
-                /* ActaDataService
-                    .list()
-                    .then(response => {
-                        items = response.data
-                    })
-                    .catch(error => {
-                        console.log(error.response.data);      
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error.response.data
-                        });
-                    }); */
-                
-            }
-        },
-        created(){
-            this.cargarDatos();
-        }
-        /* 
-            mounted(){
                 ActaDataService
                     .list()
                     .then(response => {
-                        items = response.data
-                    })
-                    .catch(error => {
-                        console.log(error.response.data);      
+                        this.items = response.data
+                    }, error => {
+
+                         /* 
+                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                        */
 
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
                     });
-            },
-         */
+                
+            }
+        }
 
     }
 </script>

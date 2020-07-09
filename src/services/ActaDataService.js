@@ -12,7 +12,7 @@ class ActaDataService {
     /* CREA UN NUEVO ACTA */
     create(data){
         return http
-            .post('acta/',{
+            .post('acta',{
                 tipo_sesion: data.tipo_sesion,
                 pdf: data.pdf,
                 resumen: data.resumen,
@@ -58,7 +58,7 @@ class ActaDataService {
     /* RETORNA UNA LISTA DE TODAS LAS ACTAS */
     list(){
         return http
-            .get('acta/');
+            .get('acta');
     }
 
     /* RETORNA UNA LISTA DE ACTAS ACTIVAS */

@@ -138,20 +138,17 @@
                             window.location.reload(false);
 
                         });
-                    })
-                    .catch(error => {
+                    }, error => {
 
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
                          *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
                          */
 
-                        console.log(error.response);
-
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
 
                     });
@@ -176,20 +173,17 @@
                             window.location.reload(false);
 
                         });
-                    })
-                    .catch(error => {
+                    }, error => {
 
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
                          *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
                          */
 
-                        console.log(error.response);
-
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
 
                     });

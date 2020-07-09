@@ -12,7 +12,7 @@ class DecanatoDataService {
     /* CREA UN NUEVO DECANATO */
     create(data){
         return http
-            .post('decanato/',{
+            .post('decanato',{
                 nombre: data.nombre,
                 siglas: data.siglas,
                 estatus: data.estatus
@@ -38,7 +38,7 @@ class DecanatoDataService {
     /* RETORNA UNA LISTA DE DECANATOS ACTIVOS */
     list(){
         return http
-            .get('decanato/');
+            .get('decanato');
     }
 }
 

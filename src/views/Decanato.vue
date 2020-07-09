@@ -57,7 +57,7 @@
             }
 
             /* SI EL USUARIO ESTA ACTIVO Y NO ES ADMIN LO REDIRIGE A LA PANTALLA DE ACTAS */
-            if(this.currentUser && this.roleUser.includes('ROLE_ADMIN')){
+            if(this.currentUser && !this.roleUser.includes('ROLE_ADMIN')){
                 this.$router.push('/actas')
             }
         },

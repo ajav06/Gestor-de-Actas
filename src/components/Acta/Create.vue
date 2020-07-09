@@ -116,6 +116,7 @@
 <script>
     import bulmaCalendar from '../../../node_modules/bulma-calendar/dist/js/bulma-calendar';
     import ActaDataService from '../../services/ActaDataService'
+    import DecanatoDataService from '../../services/DecanatoDataService'
     import Acta from '../../models/Acta'
     import Decanato from '../../models/Decanato'
 
@@ -149,6 +150,23 @@
                     this.acta.fecha_sesion = date.data.value()
                 });
             });
+
+            DecanatoDataService
+                .list()
+                .then(response => {
+                    this.decanatos = response.data
+                }, error => {
+
+                        /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
         },
         computed: {
             /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, VERIFICANDO QUE LOS 
@@ -199,21 +217,18 @@
                         }).then(result => {
                             window.location.reload(false);
                         });
-                    })
-                    .catch(error => {
+                    }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
                          *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
                          */
 
-                        console.log(error.response);
-
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
-                    });
+                    })
             },
 
             /* METODO PARA REALIZAR EL REGISTRO */
@@ -238,19 +253,16 @@
                         }).then(result => {
                             window.location.reload(false);
                         });
-                    })
-                    .catch(error => {
+                    }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
                          *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
                          */
 
-                        console.log(error.response);
-
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
                     });
             },

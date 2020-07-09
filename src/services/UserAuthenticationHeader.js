@@ -8,9 +8,10 @@ export default function authHeader() {
     */
     if (user && user.accessToken){
         /* SI HAY ES DECIR QUE ESTA ACTIVO, ASI QUE RETORNA SU TOKEN */
-        return { Authorization: 'Bearer ' + user.accessToken };
+        return 'Bearer ' + user.accessToken;
     } else {
         /* EN CASO CONTRARIO, RETORN VACIO */
-        return {};
+        return null;
+        /* return 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNTk0Mjk2NTE3LCJleHAiOjE1OTQzODI5MTd9.vZNXO4_cYRwCVB446oHfw8kE0KPEGvlIv3NpX0uodh6W2tvBXJmZyBnizqYsOq70HUcWTgQAw35RTw0IGo86kg'; */
     }
 }

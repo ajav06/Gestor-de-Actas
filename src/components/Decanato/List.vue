@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import DecanatoDataService from '../../services/DecanatoDataService';
+    import DecanatoDataService from '../../services/DecanatoDataService'
     import Decanato from '../../models/Decanato'
     import ItemDecanato from './Item'
 
@@ -39,46 +39,69 @@
                 ]
             }
         },
+        /* updated() {
+
+            this.$nextTick(function () {
+                $('#decanatos').DataTable({
+                responsive: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                lengthMenu: [3, 6, 10, 25, 50, 75, 100]
+                });
+            })
+
+        }, */
+        mounted(){
+            this.$nextTick(function () {
+                $('#decanatos').DataTable({
+                responsive: true,
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+                },
+                lengthMenu: [3, 6, 10, 25, 50, 75, 100]
+                });
+            })
+
+            DecanatoDataService
+                .list()
+                .then(response => {
+                    this.items = response.data
+                }, error => {
+
+                    /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+                   console.log(error);
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
+        },
         methods:{
             cargarDatos(){
-                /* DecanatoDataService
-                    .list()
-                    .then(response => {
-                        items = response.data
-                    })
-                    .catch(error => {
-                        console.log(error.response.data);      
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error.response.data
-                        });
-                    }); */
-                
-            }
-        },
-        created(){
-            this.cargarDatos();
-        }
-        /* 
-            mounted(){
                 DecanatoDataService
                     .list()
                     .then(response => {
-                        items = response.data
-                    })
-                    .catch(error => {
-                        console.log(error.response.data);      
+                        this.items = response.data
+                    }, error => {
+
+                         /* 
+                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                        */
 
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: error.response.data
+                            text: error
                         });
                     });
-            },
-         */
+                
+            }
+        },
 
     }
 </script>
