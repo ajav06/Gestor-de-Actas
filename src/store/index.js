@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import AuthService from '../services/UserAuthenticationService'
+import AuthService from '../services/UserAuthService'
 
 /* GUARDA LOS DATOS DEL JSON LOCAL EN UNA VARIABLE */
 const user = JSON.parse(localStorage.getItem('user'));

@@ -1,4 +1,4 @@
-import authHeader from '../services/UserAuthenticationHeader'
+import authHeader from '../services/UserAuthHeader'
 
 /* 
  * URL BASE DE LAS PETICIONES REST

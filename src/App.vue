@@ -24,9 +24,9 @@
               <li>
                 <router-link to="/actas">Actas</router-link>
               </li>
-              <!-- <li>
-                <router-link to="/usuarios">Usuario</router-link>
-              </li> -->
+              <li>
+                <router-link to="/usuarios" v-if="showAdmin">Usuario</router-link>
+              </li>
               <li>
                 <a class="has-text-danger" @click="cerrarSesion()">Cerrar Sesión</a>
               </li>
@@ -48,9 +48,9 @@
           <li>
             <router-link to="/actas">Actas</router-link>
           </li>
-          <!--<li>
-            <router-link to="/usuarios">Usuario</router-link>
-          </li> -->
+          <li>
+            <router-link to="/usuarios" v-if="showAdmin">Usuario</router-link>
+          </li>
           <li>
             <a class="has-text-danger" @click="cerrarSesion()">Cerrar Sesión</a>
           </li>

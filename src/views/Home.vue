@@ -42,7 +42,7 @@
     export default {
         data() {
             return {
-                user: new Usuario('', '', ''),
+                user: new Usuario('','', '', '', ''),
                 loading: false
             }
         },
