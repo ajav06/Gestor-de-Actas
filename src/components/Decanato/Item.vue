@@ -56,18 +56,14 @@
 
 <script>
     import DecanatoDataService from '../../services/DecanatoDataService';
+    import Decanato from '../../models/Decanato'
 
     export default {
         name: 'ItemDecanato',
         props: ['decanato'],
         data() {
             return {
-                item: {
-                    codigo: null,
-                    nombre: null,
-                    siglas: null,
-                    estatus: 'A'
-                },
+                item: new Decanato('','','','A'),
                 update: false /* BOOLEAN PARA VERIFICAR SI ESTA REALIZANDO UNA MODIFICACIÓN */
             }
         },

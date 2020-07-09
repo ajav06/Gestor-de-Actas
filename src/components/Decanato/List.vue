@@ -19,6 +19,7 @@
 
 <script>
     import DecanatoDataService from '../../services/DecanatoDataService';
+    import Decanato from '../../models/Decanato'
     import ItemDecanato from './Item'
 
     export default {
@@ -28,70 +29,13 @@
         },
         data() {
             return {
-                items: [{
-                        codigo: 1,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 2,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 3,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 4,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 5,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 6,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 7,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 8,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 9,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 10,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 11,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 12,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 13,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 14,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    },
+                items: [
+                    new Decanato(1, 'Ciencias y Tecnología', 'DCyT', 'A') ,
+                    new Decanato(2, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
+                    new Decanato(3, 'INGENIERIA CIVIL', 'DIC', 'A') ,
+                    new Decanato(4, 'Ciencias y Tecnología', 'DCyT', 'A') ,
+                    new Decanato(5, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
+                    new Decanato(6, 'INGENIERIA CIVIL', 'DIC', 'A') ,
                 ]
             }
         },

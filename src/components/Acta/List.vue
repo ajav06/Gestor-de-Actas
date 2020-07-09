@@ -5,13 +5,13 @@
                 <tr>
                     <th>Tipo</th>
                     <th>Fecha</th>
-                    <th>Decanato</th>
+                    <th>Resúmen</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
 
-                <item-decanato v-for="item of items" :key="item.codigo" :decanato=item />
+                <item-acta v-for="item of items" :key="item.codigo" :acta=item />
 
             </tbody>
         </table>
@@ -19,67 +19,30 @@
 </template>
 
 <script>
-    import TableDataService from '../../services/DecanatoDataService';
-    import ItemDecanato from './Item'
+    import ActaDataService from '../../services/ActaDataService';
+    import Acta from '../../models/Acta'
+    import ItemActa from './Item'
 
     export default {
-        name: 'ListDecanato',
+        name: 'ListActa',
         components: {
-            ItemDecanato
+            ItemActa
         },
         data() {
             return {
                 items: [
-                    {
-                        codigo: 3,
-                        tipo_sesion: 'o',
-                        fecha_sesion: '2020-10-01',
-                        decanato:{
-                            codigo: 1,
-                        },
-                        pdf: 'akkaslkalsk',
-                        resumen: 'JALABOLAS',
-                        estatus: 'A'
-                    },
-                    {
-                        codigo: 2,
-                        tipo_sesion: 'o',
-                        fecha_sesion: '2020-10-01',
-                        decanato:{
-                            codigo: 1,
-                        },
-                        pdf: 'akkaslkalsk',
-                        resumen: 'JALABOLAS',
-                        estatus: 'A'
-                    },
-                    {
-                        codigo: 3,
-                        tipo_sesion: 'o',
-                        fecha_sesion: '2020-10-01',
-                        decanato:{
-                            codigo: 1,
-                        },
-                        pdf: 'akkaslkalsk',
-                        resumen: 'JALABOLAS',
-                        estatus: 'A'
-                    },
-                    {
-                        codigo: 4,
-                        tipo_sesion: 'o',
-                        fecha_sesion: '2020-10-01',
-                        decanato:{
-                            codigo: 1,
-                        },
-                        pdf: 'akkaslkalsk',
-                        resumen: 'JALABOLAS',
-                        estatus: 'A'
-                    },
+                    new Acta(1, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 1, 'A'),
+                    new Acta(2, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 3, 'A'),
+                    new Acta(3, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 2, 'A'),
+                    new Acta(4, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 1, 'A'),
+                    new Acta(5, 'o', '2020-10-01', 'asdsdsd', 'JALABOLAS', 3, 'A'),
+                    new Acta(6, 'e', '2020-10-01', 'asdsdsd', 'JALABOLAS', 2, 'A'),
                 ]
             }
         },
         methods:{
             cargarDatos(){
-                /* TableDataService
+                /* ActaDataService
                     .list()
                     .then(response => {
                         items = response.data
@@ -101,7 +64,7 @@
         }
         /* 
             mounted(){
-                TableDataService
+                ActaDataService
                     .list()
                     .then(response => {
                         items = response.data

@@ -3,13 +3,22 @@
         <td>
             <!-- SI NO ESTA MODIFICANDO, SOLO MUESTRA EL NOMBRE -->
             <p v-if="!update">
-                {{ decanato.nombre }}
+                {{ acta.tipo_sesion=='e' ? 'Extraordinario' : 'Ordinaria' }}
             </p>
 
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
             <div class="field" v-else>
                 <div class="control">
-                    <input type="text" class="input" v-model="item.nombre">
+                    <div class="select is-info is-fullwidth">
+                        <select v-model="item.tipo_sesion">
+                            <option value="o" selected>
+                                Ordinaria
+                            </option>
+                            <option value="e" selected>
+                                Extraordinaria
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </td>
@@ -17,13 +26,27 @@
         <td>
             <!-- SI NO ESTA MODIFICANDO, SOLO MUESTRA LAS SIGLAS -->
             <p v-if="!update">
-                {{ decanato.siglas }}
+                {{ acta.fecha_sesion }}
             </p>
 
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
             <div class="field" v-else>
                 <div class="control">
-                    <input type="text" class="input" v-model="item.siglas">
+                    <input type="date" ref="calend">
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <!-- SI NO ESTA MODIFICANDO, SOLO MUESTRA LAS SIGLAS -->
+            <p v-if="!update">
+                {{ acta.resumen }}
+            </p>
+
+            <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
+            <div class="field" v-else>
+                <div class="control">
+                    <textarea type="text" class="textarea" v-model="item.resumen"></textarea>
                 </div>
             </div>
         </td>
@@ -55,40 +78,50 @@
 </template>
 
 <script>
-    import DecanatoDataService from '../../services/DecanatoDataService';
+    import bulmaCalendar from "../../../node_modules/bulma-calendar/dist/js/bulma-calendar";
+    import ActaDataService from '../../services/ActaDataService';
+    import Acta from '../../models/Acta'
 
     export default {
-        name: 'ItemDecanato',
-        props: ['decanato'],
+        name: 'ItemActa',
+        props: ['acta'],
         data() {
             return {
-                item: {
-                    codigo: null,
-                    nombre: null,
-                    siglas: null,
-                    estatus: 'A'
-                },
+                item: new Acta('', '', '', '', '','','A'),
                 update: false /* BOOLEAN PARA VERIFICAR SI ESTA REALIZANDO UNA MODIFICACIÓN */
             }
         },
-        computed: {
-            datos() {
-                return this.item.nombre;
-            }
+        updated(){
+            const calendars = bulmaCalendar.attach(this.$refs.calend, {
+                type: 'date',
+                color: 'info',
+                lang: 'es',
+                startDate: new Date(this.item.fecha_sesion),
+                dateFormat: 'YYYY-MM-DD'
+            });
+            
+            calendars.forEach(calendar => {
+                calendar.on('select', date => {
+                    this.item.fecha_sesion = date.data.value()
+                });
+            });
         },
         methods: {
             /* ACTIVA LOS CAMPOS PARA REALIZAR LA MODIFICACIÓN */
             activarCampos() {
                 this.update = !this.update;
-                this.item.codigo = this.decanato.codigo;
-                this.item.nombre = this.decanato.nombre;
-                this.item.siglas = this.decanato.siglas;
+                this.item.codigo = this.acta.codigo;
+                this.item.tipo_sesion = this.acta.tipo_sesion;
+                this.item.fecha_sesion = this.acta.fecha_sesion;
+                this.item.resumen = this.acta.resumen;
+                this.item.decanato.codigo = this.acta.decanato.codigo;
+                this.item.pdf = this.acta.pdf;
             },
 
             /* METODO PARA REALIZAR LA ACTUALIZACIÓN */
-            actualizarDecanato() {
-                /* DE LA CLASE 'DecanatoDataService' LLAMA LA FUNCIÓN DE ACTUALIZAR */
-                DecanatoDataService
+            actualizarActa() {
+                /* DE LA CLASE 'ActaDataService' LLAMA LA FUNCIÓN DE ACTUALIZAR */
+                ActaDataService
                     .update(this.item)
                     .then(response => {
 
@@ -99,7 +132,7 @@
 
                         Swal.fire({
                             icon: 'success',
-                            title: 'Decanato actualizado con éxito.'
+                            title: 'Acta actualizada con éxito.'
                         }).then(result => {
 
                             window.location.reload(false);
@@ -124,10 +157,10 @@
                     });
             },
 
-            eliminarDecanato() {
-                /* DE LA CLASE 'DecanatoDataService' LLAMA LA FUNCIÓN DE ELIMINAR */
-                DecanatoDataService
-                    .remove(this.decanato.codigo)
+            eliminarActa() {
+                /* DE LA CLASE 'ActaDataService' LLAMA LA FUNCIÓN DE ELIMINAR */
+                ActaDataService
+                    .remove(this.acta.codigo)
                     .then(response => {
 
                         /* SI LA ELIMINACIÓN SE REALIZO CON ÉXITO, 
@@ -137,7 +170,7 @@
 
                         Swal.fire({
                             icon: 'success',
-                            title: 'Decanato eliminado con éxito.'
+                            title: 'Acta eliminada con éxito.'
                         }).then(result => {
 
                             window.location.reload(false);
@@ -169,8 +202,8 @@
                 if (tipo == 'M') {
                     Swal.fire({
                         icon: 'question',
-                        title: 'Actualizar Decanato',
-                        text: '¿Desea actualizar el decanato?',
+                        title: 'Actualizar Acta',
+                        text: '¿Desea actualizar el acta?',
                         showCancelButton: true,
                         cancelButtonColor: '#d33',
                         confirmButtonColor: '#48c774',
@@ -178,9 +211,9 @@
                         confirmButtonText: 'Sí',
                     }).then(result => {
 
-                        /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE ACTUALIZAR DECANATO */
+                        /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE ACTUALIZAR ACTA */
                         if (result.value) {
-                            this.actualizarDecanato();
+                            this.actualizarActa();
                         }
                     });
                 }
@@ -189,8 +222,8 @@
                 else if (tipo == 'E') {
                     Swal.fire({
                         icon: 'question',
-                        title: 'Eliminar Decanato',
-                        text: '¿Desea eliminar el decanato?',
+                        title: 'Eliminar Acta',
+                        text: '¿Desea eliminar el Acta?',
                         showCancelButton: true,
                         cancelButtonColor: '#d33',
                         confirmButtonColor: '#48c774',
@@ -198,9 +231,9 @@
                         confirmButtonText: 'Sí',
                     }).then(result => {
 
-                        /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE ELIMINAR DECANATO */
+                        /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE ELIMINAR ACTA */
                         if (result.value) {
-                            this.eliminarDecanato();
+                            this.eliminarActa();
                         }
                     });
                 }
@@ -214,7 +247,7 @@
 </script>
 
 <style>
-    .field.is-grouped {
-        justify-content: center;
+    .datetimepicker-dummy-input{
+        max-width: 100% !important;
     }
 </style>

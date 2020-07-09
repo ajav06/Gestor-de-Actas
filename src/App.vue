@@ -1,7 +1,7 @@
 <template>
   <section id="app" class="hero is-fullheight is-info">
 
-    <div class="hero-head">
+    <div class="hero-head" v-if="currentUser">
       <nav class="navbar">
         <div class="navbar-brand">
 
@@ -19,13 +19,16 @@
             </p>
             <ul class="menu-list">
               <li>
-                <router-link to="/decanatos">Decanato</router-link>
-              </li>
-              <li>
-                <router-link to="/usuarios">Usuario</router-link>
+                <router-link to="/decanatos" v-if="showAdmin">Decanato</router-link>
               </li>
               <li>
                 <router-link to="/actas">Actas</router-link>
+              </li>
+              <!-- <li>
+                <router-link to="/usuarios">Usuario</router-link>
+              </li> -->
+              <li>
+                <a class="has-text-danger" @click="cerrarSesion()">Cerrar Sesión</a>
               </li>
             </ul>
           </aside>
@@ -34,19 +37,22 @@
     </div>
 
     <div class="hero-body">
-      <aside class="menu column is-2">
+      <aside class="menu column is-2" v-if="currentUser">
         <p class="menu-label">
           Gestionar
         </p>
         <ul class="menu-list">
           <li>
-            <router-link to="/decanatos">Decanato</router-link>
-          </li>
-          <li>
-            <router-link to="/usuarios">Usuario</router-link>
+            <router-link to="/decanatos" v-if="showAdmin">Decanato</router-link>
           </li>
           <li>
             <router-link to="/actas">Actas</router-link>
+          </li>
+          <!--<li>
+            <router-link to="/usuarios">Usuario</router-link>
+          </li> -->
+          <li>
+            <a class="has-text-danger" @click="cerrarSesion()">Cerrar Sesión</a>
           </li>
         </ul>
       </aside>
@@ -71,10 +77,11 @@
       });
 
       $('.table').DataTable({
-        "language": {
-          "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+        responsive: true,
+        language: {
+          url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
         },
-        "lengthMenu": [3, 6, 10, 25, 50, 75, 100]
+        lengthMenu: [3, 6, 10, 25, 50, 75, 100]
       });
 
     },
@@ -83,13 +90,47 @@
 
       this.$nextTick(function () {
         $('.table').DataTable({
-          "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+          responsive: true,
+          language: {
+            url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
           },
-          "lengthMenu": [3, 6, 10, 25, 50, 75, 100]
+          lengthMenu: [3, 6, 10, 25, 50, 75, 100]
         });
       })
 
+    },
+    computed:{
+        /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+            RETORNA EL USUARIO ACTUAL */
+        currentUser(){
+            return this.$store.state.auth.user;
+        },
+
+        /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+            RETORNA EL ROL DEL USUARIO ACTUAL, SI ESTA EL USUARIO ESTA ACTIVO */
+        roleUser(){
+            if(this.currentUser){
+                return this.currentUser.roles;
+            }
+        },
+
+        /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+            RETORNA VERDADERO SI ES ADMIN Y SI ESTA EL USUARIO ESTA ACTIVO */
+        showAdmin(){
+          if(this.currentUser && this.roleUser){
+            return this.roleUser.includes('ROLE_ADMIN')
+          }
+          return false;
+        },
+
+        /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+            RETORNA VERDADERO SI ES ADMIN Y SI ESTA EL USUARIO ESTA ACTIVO */
+        showSecretario(){
+          if(this.currentUser && this.roleUser){
+            return this.roleUser.includes('ROLE_SECRETARIO')
+          }
+          return false;
+        },
     },
     methods: {
       cerrarSesion() {
@@ -106,7 +147,8 @@
 
         }).then(result => {
           if (result.value) {
-            this.$store.dispatch('logoutAction')
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/');
           }
         });
 

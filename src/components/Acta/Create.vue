@@ -116,86 +116,22 @@
 <script>
     import bulmaCalendar from '../../../node_modules/bulma-calendar/dist/js/bulma-calendar';
     import ActaDataService from '../../services/ActaDataService'
+    import Acta from '../../models/Acta'
+    import Decanato from '../../models/Decanato'
 
     export default {
         name: 'CreateActa',
         data() {
             return {
-                acta: {
-                    tipo_sesion: 'o',
-                    fecha_sesion: new Date().toLocaleDateString(),
-                    decanato:{
-                        codigo: 1,
-                    },
-                    pdf: null,
-                    resumen: null,
-                    estatus: 'A'
-                },
+                acta: new Acta('','o',new Date().toLocaleDateString(),'','',1,'A'),
                 pdfUpload: false,
-                decanatos:[{
-                        codigo: 1,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 2,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 3,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 4,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 5,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 6,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 7,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 8,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 9,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 10,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 11,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 12,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    }, {
-                        codigo: 13,
-                        nombre: 'Ciencias y Tecnología',
-                        siglas: 'DCyT'
-                    },
-                    {
-                        codigo: 14,
-                        nombre: 'Civil',
-                        siglas: 'DEA'
-                    },
+                decanatos:[
+                    new Decanato(1, 'Ciencias y Tecnología', 'DCyT', 'A') ,
+                    new Decanato(2, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
+                    new Decanato(3, 'INGENIERIA CIVIL', 'DIC', 'A') ,
+                    new Decanato(4, 'Ciencias y Tecnología', 'DCyT', 'A') ,
+                    new Decanato(5, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
+                    new Decanato(6, 'INGENIERIA CIVIL', 'DIC', 'A') ,
                 ]
             }
         },
@@ -241,11 +177,7 @@
 
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
-                this.acta.tipo_sesion = null;
-                this.acta.fecha_sesion = null;
-                this.acta.decanato.codigo = 1;
-                this.acta.pdf =null;
-                this.acta.resumen =null;
+                this.acta = new Acta('','','','','',1,'A');
                 this.$emit('cancelar-registro'); /* EMITE LA SEÑAL DE CANCELAR REGISTRO */
             },
 

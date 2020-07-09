@@ -48,16 +48,13 @@
 
 <script>
     import DecanatoDataService from '../../services/DecanatoDataService'
+    import Decanato from '../../models/Decanato'
 
     export default {
         name: 'CreateDecanato',
         data() {
             return {
-                decanato: {
-                    nombre: null,
-                    siglas: null,
-                    estatus: 'A'
-                }
+                decanato: new Decanato('', '', '', 'A')
             }
         },
         computed: {
@@ -73,8 +70,7 @@
         methods: {
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
-                this.decanato.nombre = null;
-                this.decanato.siglas = null;
+                this.decanato = new Decanato('', '', '', 'A');
                 this.$emit('cancelar-registro'); /* EMITE LA SEÑAL DE CANCELAR REGISTRO */
             },
 

@@ -4,13 +4,7 @@
             <div class="column is-5-tablet is-4-desktop is-3-widescreen">
                 <form action="" class="box">
 
-                    <figure class="image">
-                        <img src="../assets/logo.png" alt="Logo Against Humanity Vzla">
-                    </figure>
-
-                    <br>
-
-                    <h5 class="subtitle is-5 has-text-centered has-text-grey-dark">Inicie sesión</h5>
+                    <h4 class="subtitle is-4 has-text-centered has-text-grey-dark">Inicar sesión</h4>
 
                     <div class="field">
                         <div class="control">
@@ -24,16 +18,6 @@
                                 v-model="user.password">
                         </div>
                     </div>
-                    <!-- 
-
-                    <div class="field">
-                        <div class="control">
-                            <label class="checkbox">
-                                <input type="checkbox">
-                                Remember me
-                            </label>
-                        </div>
-                    </div> -->
 
                     <div class="field">
                         <div class="control">
@@ -46,8 +30,6 @@
                         </div>
                     </div>
 
-                    <button class="button is-info is-fullwidth" @click="signup()">Registrarse</button>
-
                 </form>
             </div>
         </div>
@@ -55,32 +37,45 @@
 </template>
 
 <script>
+    import Usuario from '../models/Usuario'
+
     export default {
         data() {
             return {
-                user: {
-                    username: null,
-                    password: null
-                }
+                user: new Usuario('', '', ''),
+                loading: false
             }
         },
         computed: {
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, VERIFICANDO QUE LOS 
+               CAMPOS ESTAN VACIOS O NO */
             camposVacios() {
                 if (this.user.username && this.user.password)
                     return false;
 
                 return true;
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                QUE RETORNA EL ESTATUS DEL USUARIO */
+            loggedIn() {
+                return this.$store.state.auth.status.loggedIn;
+            }
+        },
+        created() {
+            /* SI EL USUARIO ESTA ACTIVO LO ENVIA A LA PANTALLA DE ACTAS */
+            if (this.loggedIn){
+                this.$router.push('/actas');
             }
         },
         methods: {
             loginA() {
-                this.$store.dispatch('loginAction', this.user);
-                this.user.username = null;
-                this.user.password = null;
+                this.$store.dispatch('auth/login', this.user)
+                    .then(() => {
+                        this.$router.push('/actas');
+                    });
+                this.user = new Usuario('', '', '');
             },
-            signup() {
-                this.$router.push('/registrase');
-            }
         }
     }
 </script>

@@ -1,18 +1,19 @@
-import * as axios from "./axios.min";
+import authHeader from '../services/UserAuthenticationHeader'
 
 /* 
  * URL BASE DE LAS PETICIONES REST
  */
-const url = 'https://ahbackend.herokuapp.com/api/';
+const API_URL = 'https://localhost:8080/api/auth/'
 
 /*
  *  CONFIGURACIÓN INICIAL DE LOS SERVICIOS REST
  */
 
 var http = axios.create({
-    baseURL: url,
+    baseURL: API_URL,
     headers: {
-        'Content-type': 'application/json'
+        'Content-type': 'application/json',
+        authHeader
     }
 });
 
