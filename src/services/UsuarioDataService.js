@@ -27,11 +27,13 @@ class UsuarioDataService {
         console.log(data);
         return http
             .put('usuario/'+ data.id,{
+                id: data.id,
                 cedula: data.username,
                 email: data.email,
-                role:data.rol,
-                decanato_id:data.decanato_id,
-                password: '123'
+                roles:[data.roles],
+                decanato:data.decanato,
+                password: data.password,
+                estatus: data.estatus
             });
     }
 

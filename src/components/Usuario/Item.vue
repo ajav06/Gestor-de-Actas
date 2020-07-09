@@ -23,9 +23,9 @@
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
             <div class="field" v-else>
                 <div class="select is-info is-fullwidth">
-                    <select v-model="item.decanato_id">
+                    <select v-model="item.decanato">
                         <option v-for="decanato of decanatos" 
-                            :key="decanato.codigo" :selected="decanato.codigo == item.decanato_id" :value="decanato.codigo">
+                            :key="decanato.codigo" :selected="decanato.codigo == item.decanato.codigo" :value="decanato">
                             {{ decanato.siglas }}
                         </option>
                     </select>
@@ -41,9 +41,9 @@
             <div class="field" v-else>
                 <div class="control">
                     <div class="select is-info is-fullwidth">
-                        <select v-model="item.rol">
+                        <select v-model="item.roles">
                             <option v-for="rol of roles" 
-                                :key="rol.id" :selected="rol.id == item.rol" :value="rol.id">
+                                :key="rol.id" :selected="rol.id == item.roles.id" :value="rol">
                                 {{ rol.rol }}
                             </option>
                         </select>
@@ -137,15 +137,15 @@
                 this.item.id = this.usuario.id;
                 this.item.email = this.usuario.email;
                 this.item.username = this.usuario.cedula;
-                this.item.decanato_id = this.usuario.decanato.codigo;
-                this.item.rol = this.usuario.roles[0].id;
+                this.item.password = this.usuario.password;
+                this.item.decanato = this.usuario.decanato;
+                this.item.roles = this.usuario.roles[0];
             },
 
             /* METODO PARA REALIZAR LA ACTUALIZACIÓN */
             actualizarUsuario() {
                 /* DE LA CLASE 'UsuarioDataService' LLAMA LA FUNCIÓN DE ACTUALIZAR */
-                console.log(this.usuario);
-                this.item.setRol();
+                
                 UsuarioDataService
                     .update(this.item)
                     .then(response => {
