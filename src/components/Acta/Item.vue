@@ -3,7 +3,7 @@
         <td>
             <!-- SI NO ESTA MODIFICANDO, SOLO MUESTRA EL NOMBRE -->
             <p v-if="!update">
-                {{ acta.tipo_sesion=='e' ? 'Extraordinario' : 'Ordinaria' }}
+                {{ acta.tipo_sesion=='x' ? 'Extraordinario' : 'Ordinaria' }}
             </p>
 
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
@@ -11,10 +11,10 @@
                 <div class="control">
                     <div class="select is-info is-fullwidth">
                         <select v-model="item.tipo_sesion">
-                            <option value="o" selected>
+                            <option value="o" :selected="item.tipo_sesion == 'o'">
                                 Ordinaria
                             </option>
-                            <option value="e" selected>
+                            <option value="x" :selected="item.tipo_sesion == 'x'">
                                 Extraordinaria
                             </option>
                         </select>
@@ -32,7 +32,7 @@
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
             <div class="field" v-else>
                 <div class="control">
-                    <input type="date" ref="calend">
+                    <input type="date" ref="calend" id="calend">
                 </div>
             </div>
         </td>
@@ -87,12 +87,12 @@
         props: ['acta'],
         data() {
             return {
-                item: new Acta('', '', '', '', '','','A'),
+                item: new Acta(),
                 update: false /* BOOLEAN PARA VERIFICAR SI ESTA REALIZANDO UNA MODIFICACIÓN */
             }
         },
         updated(){
-            const calendars = bulmaCalendar.attach(this.$refs.calend, {
+            const calendars = bulmaCalendar.attach('[type="date"]', {
                 type: 'date',
                 color: 'info',
                 lang: 'es',
@@ -103,6 +103,7 @@
             calendars.forEach(calendar => {
                 calendar.on('select', date => {
                     this.item.fecha_sesion = date.data.value()
+                    console.log(this.item.fecha_sesion);
                 });
             });
         },

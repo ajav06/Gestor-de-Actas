@@ -10,23 +10,13 @@ class UsuarioDataService {
     }
 
     /* CREA UN NUEVO USUARIO ADMIN */
-    createAdmin(data){
+    create(data){
+        console.log(data);
         return http
-            .post('auth/singnup',{
+            .post('usuario',{
                 cedula: data.username,
                 email: data.email,
-                role:['admin'],
-                decanato_id:data.decanato_id,
-                password: data.password
-            });
-    }
-
-    /* CREA UN NUEVO USUARIO SECRETARIO */
-    createSecret(data){
-        return http
-            .post('auth/singnup',{
-                cedula: data.username,
-                email: data.email,
+                role:data.rol,
                 decanato_id:data.decanato_id,
                 password: data.password
             });
@@ -34,13 +24,14 @@ class UsuarioDataService {
 
     /* ACTUALIZA UN USUARIO EN ESPECÍFICO */
     update(data){
+        console.log(data);
         return http
             .put('usuario/'+ data.id,{
                 cedula: data.username,
                 email: data.email,
-                role:['admin'],
+                role:data.rol,
                 decanato_id:data.decanato_id,
-                password: data.password
+                password: '123'
             });
     }
 
@@ -54,6 +45,12 @@ class UsuarioDataService {
     list(){
         return http
             .get('usuario');
+    }
+
+    /* RETORNA UNA LISTA DE USUARIOS */
+    listRole(){
+        return http
+            .get('usuario/roles');
     }
 }
 

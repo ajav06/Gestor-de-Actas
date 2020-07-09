@@ -38,7 +38,7 @@ class DecanatoDataService {
     /* RETORNA UNA LISTA DE DECANATOS ACTIVOS */
     list(){
         return http
-            .get('decanato');
+            .get('decanato/activos');
     }
 }
 

@@ -63,13 +63,8 @@
         props: ['decanato'],
         data() {
             return {
-                item: new Decanato('','','','A'),
+                item: new Decanato(),
                 update: false /* BOOLEAN PARA VERIFICAR SI ESTA REALIZANDO UNA MODIFICACIÓN */
-            }
-        },
-        computed: {
-            datos() {
-                return this.item.nombre;
             }
         },
         methods: {

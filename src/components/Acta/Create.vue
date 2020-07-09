@@ -124,16 +124,41 @@
         name: 'CreateActa',
         data() {
             return {
-                acta: new Acta('','o',new Date().toLocaleDateString(),'','',1,'A'),
+                acta: new Acta('','o',new Date().toLocaleDateString(),null,'',1,'A'),
                 pdfUpload: false,
-                decanatos:[
-                    new Decanato(1, 'Ciencias y Tecnología', 'DCyT', 'A') ,
-                    new Decanato(2, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
-                    new Decanato(3, 'INGENIERIA CIVIL', 'DIC', 'A') ,
-                    new Decanato(4, 'Ciencias y Tecnología', 'DCyT', 'A') ,
-                    new Decanato(5, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
-                    new Decanato(6, 'INGENIERIA CIVIL', 'DIC', 'A') ,
-                ]
+                decanatos:[]
+            }
+        },
+        computed:{
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, VERIFICANDO QUE LOS 
+               CAMPOS ESTAN VACIOS O NO */
+            camposVacios() {
+                if (this.acta.fecha_sesion && this.acta.resumen && this.acta.pdf)
+                    return false;
+
+                return true;
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL USUARIO ACTUAL */
+            currentUser(){
+                return this.$store.state.auth.user;
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL ROL DEL USUARIO ACTUAL, SI ESTA EL USUARIO ESTA ACTIVO */
+            roleUser(){
+                if(this.currentUser){
+                    return this.currentUser.roles;
+                }
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL DECANATO DEL USUARIO ACTUAL, SI ESTA EL USUARIO ESTA ACTIVO */
+            decanatoUser(){
+                if(this.currentUser){
+                    return this.currentUser.decanato_id;
+                }
             }
         },
         mounted() {
@@ -147,35 +172,49 @@
             
             calendars.forEach(calendar => {
                 calendar.on('select', date => {
-                    this.acta.fecha_sesion = date.data.value()
+                    this.acta.fecha_sesion = date.data.value();
+                    console.log(this.acta.fecha_sesion);
                 });
             });
 
-            DecanatoDataService
-                .list()
-                .then(response => {
-                    this.decanatos = response.data
-                }, error => {
+            /* SI EL USUARIO ESTA ACTIVO Y ES ADMIN CARGA TODOS LOS DECANATOS */
+            if(this.currentUser && this.roleUser.includes('ROLE_ADMIN')){
+                DecanatoDataService
+                    .list()
+                    .then(response => {
+                        this.decanatos = response.data
+                    }, error => {
 
                         /* 
-                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
-                    */
+                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                        */
+                    console.log(error);
 
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error
+                        });
                     });
-                });
-        },
-        computed: {
-            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, VERIFICANDO QUE LOS 
-               CAMPOS ESTAN VACIOS O NO */
-            camposVacios() {
-                if (this.acta.fecha_sesion && this.acta.resumen && this.acta.pdf)
-                    return false;
+            } else if(this.currentUser && !this.roleUser.includes('ROLE_ADMIN')){
+                /* SINO CARAGA SOLO SU DECANATOS */
+                DecanatoDataService
+                    .list()
+                    .then(response => {
+                        this.decanatos = response.data
+                    }, error => {
 
-                return true;
+                        /* 
+                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                        */
+                    console.log(error);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error
+                        });
+                    });
             }
         },
         methods: {
@@ -188,14 +227,17 @@
                     return
                 }
 
-                /* EN CASO CONTRARIO ALMACENA EL PDF EN UNA VARIBLE */                    
-                this.pdfUpload = file[0];
+                /* EN CASO CONTRARIO ALMACENA EL PDF EN UNA VARIBLE */  
+                var formData = new FormData();
+                formData.append('file', file[0]);
+
+                this.pdfUpload = formData;
                 $('#fileActa .file-name')[0].innerText = file[0].name;
             },
 
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
-                this.acta = new Acta('','','','','',1,'A');
+                this.acta = new Acta();
                 this.$emit('cancelar-registro'); /* EMITE LA SEÑAL DE CANCELAR REGISTRO */
             },
 
@@ -234,7 +276,7 @@
             /* METODO PARA REALIZAR EL REGISTRO */
             subirPDF() {
                 /* DE LA CLASE 'ActaDataService' LLAMA LA FUNCIÓN DE SUBIR PDF */
-                ActaDataService
+                 ActaDataService
                     .uploadPDF(this.pdfUpload)
                     .then(response => {
 
@@ -244,15 +286,13 @@
                          * Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
 
-                        this.acta.pdf = response.data['field'];
-                        console.log(this.acta.pdf);
+                        this.acta.pdf = response.data['fileId'];
 
                         Swal.fire({
                             icon: 'success',
                             title: 'Se ha registrado con éxito',
-                        }).then(result => {
-                            window.location.reload(false);
                         });
+
                     }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
@@ -284,7 +324,7 @@
 
                         /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE REGISTRAR EL ACTA */
                         if (result.value) {
-                            this.crearDecanato();
+                            this.crearActa();
                         }
                     });
                 }

@@ -57,9 +57,11 @@
                         <label for="siglas" class="label">Rol:</label>
                         <div class="control">
                             <div class="select is-info is-fullwidth">
-                                <select v-model="rol">
-                                    <option value="admin" selected>Administrador</option>
-                                    <option value="secret">Secretario</option>
+                                <select v-model="usuario.rol">
+                                    <option v-for="item of roles" 
+                                        :key="item.id" :selected="item.id == usuario.rol" :value="item.id">
+                                        {{ item.rol }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -94,9 +96,9 @@
         name: 'CreateUsuario',
         data() {
             return {
-                usuario: new Usuario('','','','',1),
-                rol: 'admin',
-                decanatos:[]
+                usuario: new Usuario(),
+                decanatos:[],
+                roles:[]
             }
         },
         mounted() {
@@ -104,6 +106,23 @@
                 .list()
                 .then(response => {
                     this.decanatos = response.data
+                }, error => {
+
+                        /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
+
+            UsuarioDataService
+                .listRole()
+                .then(response => {
+                    this.roles = response.data
                 }, error => {
 
                         /* 
@@ -130,71 +149,41 @@
         methods: {
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
-                this.usuario = new Usuario('','','','',1);
+                this.usuario = new Usuario();
                 this.$emit('cancelar-registro'); /* EMITE LA SEÑAL DE CANCELAR REGISTRO */
             },
 
             /* METODO PARA REALIZAR EL REGISTRO */
             crearUsuario() {
                 /* DE LA CLASE 'UsuarioDataService' LLAMA LA FUNCIÓN DE CREAR */
-                /* CHEQUEA EL ROL SELECCIONADO */
-                if(this.rol=='admin'){
-                    UsuarioDataService
-                        .createAdmin(this.usuario)
-                        .then(response => {
+                this.usuario.setRol();
+                UsuarioDataService
+                    .create(this.usuario)
+                    .then(response => {
 
-                            /* SI EL REGISTRO SE REALIZO CON ÉXITO, 
-                            *  CAPTURA LA RESPUETA DE LA API
-                            *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
-                            */
+                        /* SI EL REGISTRO SE REALIZO CON ÉXITO, 
+                        *  CAPTURA LA RESPUETA DE LA API
+                        *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
+                        */
 
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Se ha registrado con éxito',
-                            }).then(result => {
-                                window.location.reload(false);
-                            });
-                        }, error => {
-                            /* Y SI HUBO UN ERROR
-                            *  CAPTURA LA RESPUETA DEL ERROR LA API
-                            *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
-                            */
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: error
-                            });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Se ha registrado con éxito',
+                        }).then(result => {
+                            window.location.reload(false);
                         });
-                } else {
-                    UsuarioDataService
-                        .createSecret(this.usuario)
-                        .then(response => {
+                    }, error => {
+                        /* Y SI HUBO UN ERROR
+                        *  CAPTURA LA RESPUETA DEL ERROR LA API
+                        *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
+                        */
 
-                            /* SI EL REGISTRO SE REALIZO CON ÉXITO, 
-                            *  CAPTURA LA RESPUETA DE LA API
-                            *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
-                            */
-
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Se ha registrado con éxito',
-                            }).then(result => {
-                                window.location.reload(false);
-                            });
-                        }, error => {
-                            /* Y SI HUBO UN ERROR
-                            *  CAPTURA LA RESPUETA DEL ERROR LA API
-                            *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
-                            */
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: error
-                            });
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error
                         });
-                }
+                    });
             },
 
              /* METODO DE MENSAJE DE CONFIRMACIÓN */
@@ -211,9 +200,9 @@
                     confirmButtonText: 'Sí',
                 }).then(result => {
 
-                    /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE REGISTRAR EL DECANATO */
+                    /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE REGISTRAR EL USUARIO */
                     if (result.value) {
-                        this.crearDecanato();
+                        this.crearUsuario();
                     }
                 });
 

@@ -29,29 +29,9 @@
         },
         data() {
             return {
-                items: [
-                    new Decanato(1, 'Ciencias y Tecnología', 'DCyT', 'A') ,
-                    new Decanato(2, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
-                    new Decanato(3, 'INGENIERIA CIVIL', 'DIC', 'A') ,
-                    new Decanato(4, 'Ciencias y Tecnología', 'DCyT', 'A') ,
-                    new Decanato(5, 'HUMANIDADES Y ARTES', 'DEHA', 'A') ,
-                    new Decanato(6, 'INGENIERIA CIVIL', 'DIC', 'A') ,
-                ]
+                items: null
             }
         },
-        /* updated() {
-
-            this.$nextTick(function () {
-                $('#decanatos').DataTable({
-                responsive: true,
-                language: {
-                    url: "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
-                },
-                lengthMenu: [3, 6, 10, 25, 50, 75, 100]
-                });
-            })
-
-        }, */
         mounted(){
             this.$nextTick(function () {
                 $('#decanatos').DataTable({
@@ -80,27 +60,6 @@
                         text: error
                     });
                 });
-        },
-        methods:{
-            cargarDatos(){
-                DecanatoDataService
-                    .list()
-                    .then(response => {
-                        this.items = response.data
-                    }, error => {
-
-                         /* 
-                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
-                        */
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error
-                        });
-                    });
-                
-            }
         },
 
     }

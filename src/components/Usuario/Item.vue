@@ -3,7 +3,7 @@
         <td>
             <!-- SI NO ESTA MODIFICANDO, SOLO MUESTRA EL NOMBRE -->
             <p v-if="!update">
-                {{ usuario.username }}
+                {{ usuario.cedula }}
             </p>
 
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
@@ -22,16 +22,34 @@
 
             <!-- EN CASO CONTRARIO, ACTIVA EL CAMPO PARA MODIFICAR -->
             <div class="field" v-else>
-                <div class="control">
-                    <input type="text" class="input" v-model="item.decanato_id">
+                <div class="select is-info is-fullwidth">
+                    <select v-model="item.decanato_id">
+                        <option v-for="decanato of decanatos" 
+                            :key="decanato.codigo" :selected="decanato.codigo == item.decanato_id" :value="decanato.codigo">
+                            {{ decanato.siglas }}
+                        </option>
+                    </select>
                 </div>
             </div>
         </td>
 
         <td>
-            <p>
-                {{ usuario.roles.rol }}
+            <p v-if="!update">
+                {{ usuario.roles[0].rol }}
             </p>
+
+            <div class="field" v-else>
+                <div class="control">
+                    <div class="select is-info is-fullwidth">
+                        <select v-model="item.rol">
+                            <option v-for="rol of roles" 
+                                :key="rol.id" :selected="rol.id == item.rol" :value="rol.id">
+                                {{ rol.rol }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </td>
 
 
@@ -62,7 +80,8 @@
 </template>
 
 <script>
-    import UsuarioDataService from '../../services/UsuarioDataService';
+    import UsuarioDataService from '../../services/UsuarioDataService'
+    import DecanatoDataService from '../../services/DecanatoDataService'
     import Usuario from '../../models/Usuario'
 
     export default {
@@ -70,21 +89,63 @@
         props: ['usuario'],
         data() {
             return {
-                item: new Usuario('','','','',1),
+                item: new Usuario(),
+                decanatos:[],
+                roles:[],
                 update: false /* BOOLEAN PARA VERIFICAR SI ESTA REALIZANDO UNA MODIFICACIÓN */
             }
+        },
+        mounted(){
+            DecanatoDataService
+                .list()
+                .then(response => {
+                    this.decanatos = response.data
+                }, error => {
+
+                        /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
+
+            UsuarioDataService
+                .listRole()
+                .then(response => {
+                    this.roles = response.data
+                }, error => {
+
+                        /* 
+                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                    */
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                });
         },
         methods: {
             /* ACTIVA LOS CAMPOS PARA REALIZAR LA MODIFICACIÓN */
             activarCampos() {
                 this.update = !this.update;
-                this.item.username = this.usuario.codigo;
+                this.item.id = this.usuario.id;
+                this.item.email = this.usuario.email;
+                this.item.username = this.usuario.cedula;
                 this.item.decanato_id = this.usuario.decanato.codigo;
+                this.item.rol = this.usuario.roles[0].id;
             },
 
             /* METODO PARA REALIZAR LA ACTUALIZACIÓN */
             actualizarUsuario() {
                 /* DE LA CLASE 'UsuarioDataService' LLAMA LA FUNCIÓN DE ACTUALIZAR */
+                console.log(this.usuario);
+                this.item.setRol();
                 UsuarioDataService
                     .update(this.item)
                     .then(response => {

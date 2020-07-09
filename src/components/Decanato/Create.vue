@@ -54,7 +54,7 @@
         name: 'CreateDecanato',
         data() {
             return {
-                decanato: new Decanato('', '', '', 'A')
+                decanato: new Decanato()
             }
         },
         computed: {
@@ -70,7 +70,7 @@
         methods: {
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
-                this.decanato = new Decanato('', '', '', 'A');
+                this.decanato = new Decanato();
                 this.$emit('cancelar-registro'); /* EMITE LA SEÑAL DE CANCELAR REGISTRO */
             },
 

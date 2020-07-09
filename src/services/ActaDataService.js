@@ -44,9 +44,7 @@ class ActaDataService {
     /* SUBE EL PDF DEL ACTA */
     uploadPDF(data){
         return http
-            .post('pdf/subirPDF',{
-                file: data
-            });
+            .post('pdf/subirPDF',data);
     }
 
     /* RETORNA EL PDF DEL ACTA CON CÓDIGO=id */

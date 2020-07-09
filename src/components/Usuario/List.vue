@@ -11,7 +11,7 @@
             </thead>
             <tbody>
 
-                <item-decanato v-for="item of items" :key="item.id" :decanato=item />
+                <item-usuario v-for="item of items" :key="item.id" :usuario=item />
 
             </tbody>
         </table>
@@ -30,7 +30,7 @@
         },
         data() {
             return {
-                items: []
+                items: null
             }
         },
         mounted(){

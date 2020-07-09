@@ -30,7 +30,30 @@
         },
         data() {
             return {
-                items: []
+                items: null
+            }
+        },
+        computed:{
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL USUARIO ACTUAL */
+            currentUser(){
+                return this.$store.state.auth.user;
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL ROL DEL USUARIO ACTUAL, SI ESTA EL USUARIO ESTA ACTIVO */
+            roleUser(){
+                if(this.currentUser){
+                    return this.currentUser.roles;
+                }
+            },
+
+            /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, 
+                RETORNA EL DECANATO DEL USUARIO ACTUAL, SI ESTA EL USUARIO ESTA ACTIVO */
+            decanatoUser(){
+                if(this.currentUser){
+                    return this.currentUser.decanato_id;
+                }
             }
         },
         mounted(){
@@ -44,32 +67,15 @@
                 });
             })
 
-            ActaDataService
-                .list()
-                .then(response => {
-                    this.items = response.data
-                }, error => {
-
-                    /* 
-                    *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
-                    */
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error
-                    });
-                });
-        },
-        methods:{
-            cargarDatos(){
+            /* SI EL USUARIO ESTA ACTIVO Y ES ADMIN CARGA TODAS LAS ACTAS */
+            if(this.currentUser && this.roleUser.includes('ROLE_ADMIN')){
                 ActaDataService
-                    .list()
+                    .listAct()
                     .then(response => {
                         this.items = response.data
                     }, error => {
 
-                         /* 
+                        /* 
                         *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                         */
 
@@ -79,9 +85,27 @@
                             text: error
                         });
                     });
-                
+            } else if(this.currentUser && !this.roleUser.includes('ROLE_ADMIN')){
+                /* SINO  CARGA TODAS LAS ACTAS DE SU DECANATO*/
+                ActaDataService
+                    .listDecanAct(this.decanatoUser)
+                    .then(response => {
+                        this.items = response.data
+                    }, error => {
+
+                        /* 
+                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
+                        */
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error
+                        });
+                    });
             }
-        }
+            
+        },
 
     }
 </script>
