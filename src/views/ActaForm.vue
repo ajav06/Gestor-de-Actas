@@ -137,6 +137,7 @@
                         *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                         */
                         this.acta = response.data;
+                        this.acta.fecha_sesion = new Date(Date.parse(this.acta.fecha_sesion));
                     }, error => {
                         /* Y SI HUBO UN ERROR
                         *  CAPTURA LA RESPUETA DEL ERROR LA API

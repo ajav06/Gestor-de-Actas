@@ -37,18 +37,24 @@
                     {{ props.row.resumen }}
                 </b-table-column>
 
-                <b-table-column field="decanato" label="Decanato" sortable v-show="showAdmin">
+                <b-table-column field="decanato" label="Decanato" sortable v-if="showAdmin">
                     {{ props.row.decanato.nombre }}
                 </b-table-column>
 
                 <b-table-column custom-key="actions" class="is-actions-cell is-centered" label="Opciones">
-                    <div class="buttons is-right">
+                    <div class="buttons is-center">
+
+                        <b-button @click="mensajeConfirmacion('d', props.row.pdf)"
+                            type="is-warning" 
+                            icon-left="folder-download">
+                            PDF
+                        </b-button>
 
                         <router-link :to="{name:'Acta.edit', params: {id: props.row.codigo}}" class="button is-info">
                             <b-icon icon="border-color"/> <span>Modificar</span>
                         </router-link>
 
-                        <b-button @click="mensajeConfirmacion(props.row.codigo)"
+                        <b-button @click="mensajeConfirmacion('e', props.row.codigo)"
                             type="is-danger" 
                             icon-left="delete">
                             Eliminar
@@ -194,10 +200,45 @@
                     });
             },
 
-            /* METODO DE MENSAJE DE CONFIRMACIÓN */
-            mensajeConfirmacion(data) {
+            descargarPDF(data) {
+                /* DE LA CLASE 'ActaDataService' LLAMA LA FUNCIÓN DE GETPDF */
+                ActaDataService
+                    .getPDF(data)
+                    .then(response => {
+                        var blob = new Blob([response], { type: 'application/pdf' });
 
-                Swal.fire({
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                            window.navigator.msSaveOrOpenBlob(blob); // for IE
+                        }
+                        else {
+                            var fileURL = URL.createObjectURL(blob);
+                            var newWin = window.open(fileURL);
+                            newWin.focus();
+                            newWin.reload();
+                        }
+                        
+                    }, error => {
+
+                        /* Y SI HUBO UN ERROR
+                         *  CAPTURA LA RESPUETA DEL ERROR LA API
+                         *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
+                         */
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error
+                        });
+
+                    });
+            },
+
+            /* METODO DE MENSAJE DE CONFIRMACIÓN */
+            mensajeConfirmacion(tipo, data) {
+                
+                // SI TIPO ES IGUAL A E(ELIMINAR) PREGUNTA LO SIGUIENTE
+                if(tipo=='e'){
+                    Swal.fire({
                         icon: 'question',
                         title: 'Eliminar Acta',
                         text: '¿Desea eliminar el Acta?',
@@ -213,6 +254,24 @@
                             this.eliminarActa(data);
                         }
                     });
+                } else {
+                    Swal.fire({
+                        icon: 'question',
+                        title: 'Descargar PDF',
+                        text: '¿Desea descargar el Acta?',
+                        showCancelButton: true,
+                        cancelButtonColor: '#d33',
+                        confirmButtonColor: '#48c774',
+                        cancelButtonText: 'No',
+                        confirmButtonText: 'Sí',
+                    }).then(result => {
+
+                        /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE DESCARGAR ACTA */
+                        if (result.value) {
+                            window.open('https://gestor-actas.herokuapp.com/api/pdf/descargarPDF/' + data, '_blank');
+                        }
+                    });
+                }
 
             },
         }
