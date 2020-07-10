@@ -1,39 +1,41 @@
 <template>
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-                <form action="" class="box">
+    <section class="hero is-fullheight" id="login">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-7-tablet is-5-desktop is-5-widescreen">
+                        <form action="" class="box">
 
-                    <h4 class="subtitle is-4 has-text-centered has-text-grey-dark">Inicar sesión</h4>
+                            <h4 class="subtitle is-4 has-text-centered has-text-grey-dark">Inicar sesión</h4>
 
-                    <div class="field">
-                        <div class="control">
-                            <input type="text" class="input" 
-                                placeholder="Nombre de Usuario" 
-                                v-model="user.username">
-                        </div>
-                        <div class="control">
-                            <input type="password" class="input" 
-                                placeholder="Contraseña" 
-                                v-model="user.password">
-                        </div>
+                            <hr>
+
+                            <b-field>
+                                <b-input placeholder="Nombre de Usuario" 
+                                        v-model="user.username" required></b-input>
+                            </b-field>
+
+                            <b-field>
+                                <b-input placeholder="Contraseña de Usuario"
+                                    type="password" 
+                                        v-model="user.password" required></b-input>
+                            </b-field>
+
+                            <b-field>
+                                <b-button @click="loginA()"
+                                    type="is-success" 
+                                    icon-left="login"
+                                    :disabled="camposVacios" expanded>
+                                    Iniciar Sesión
+                                </b-button>
+                            </b-field>
+
+                        </form>
                     </div>
-
-                    <div class="field">
-                        <div class="control">
-                            <button 
-                                class="button is-fullwidth is-success" 
-                                @click="loginA()"
-                                :disabled="camposVacios">
-                                Iniciar Sesión
-                            </button>
-                        </div>
-                    </div>
-
-                </form>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -79,3 +81,17 @@
         }
     }
 </script>
+
+<style lang="scss">
+    @media screen and (min-width: 1024px) {
+        #login {
+            margin-right: 14rem !important;
+        }
+    }
+
+  @media screen and (max-width: 1023px) {
+    #login {
+      margin-right: 4.5em !important;
+    }
+  }
+</style>

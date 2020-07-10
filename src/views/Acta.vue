@@ -1,24 +1,38 @@
 <template>
-    <div class="container is-fluid">
+    <section class="section">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title is-centered title is-4">
+                    <b-icon
+                        icon="domain"
+                        size="is-small"
+                        style="margin-right: 0.5em;">
+                    </b-icon>
+                    Gestionar Actas de Consejo
+                </p>
+            </header>
+            
+            <div class="card-content">
+                <!-- SI NO ESTA REGISTRANDO, SOLO MUESTRA EL BOTON PARA REGISTRAR -->
+                <div class="has-text-centered" v-if="!register">
+                    <b-button @click="activarCampos()"
+                        icon-left="text-box-plus"
+                        type="is-info">
+                        Registar Acta
+                    </b-button>
+                </div>
 
-        <h3 class="title is-3 has-text-centered">
-            Gestionar Actas de Consejo
-        </h3>
+                <!-- EN CASO CONTRARIO, ACTIVA LOS CAMPOS PARA REGISTRAR -->
+                <create-acta v-else v-on:cancelar-registro="activarCampos"/>
+                <!-- 'v-on:cancelar-registro' ESPERA QUE EL COMPONENTE
+                    CREATE DECANATO EMITA LA SEÑAL DE CANCELAR, CUANDO ESTO PASA
+                    OCULTA LOS CAMPOS -->
 
-        <!-- SI NO ESTA REGISTRANDO, SOLO MUESTRA EL BOTON PARA REGISTRAR -->
-        <div class="has-text-centered" v-if="!register">
-            <button class="button is-info" @click="activarCampos()">Registar Acta</button>
+                <br>
+                <list-acta v-if="!register" />
+            </div>
         </div>
-
-        <!-- EN CASO CONTRARIO, ACTIVA LOS CAMPOS PARA REGISTRAR -->
-        <create-acta v-else v-on:cancelar-registro="activarCampos"/>
-        <!-- 'v-on:cancelar-registro' ESPERA QUE EL COMPONENTE
-            CREATE DECANATO EMITA LA SEÑAL DE CANCELAR, CUANDO ESTO PASA
-            OCULTA LOS CAMPOS -->
-
-        <br>
-        <list-acta v-if="!register" />
-    </div>
+    </section>
 </template>
 
 <script>

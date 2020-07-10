@@ -1,0 +1,81 @@
+  @import '../node_modules/bulma/css/bulma.css';
+  @import '../node_modules/bulma-calendar/dist/css/bulma-calendar.min.css';
+
+  @media screen and (min-width: 1024px) {
+      .hero-head {
+          display: none !important;
+      }
+  }
+
+  @media screen and (max-width: 1024px) {
+      .hero-body .menu {
+          display: none !important;
+          background-color: #c5e7 !important;
+      }
+  }
+
+  .hero.is-info .navbar-menu {
+      background-color: #9dc2e5;
+  }
+
+  .hero-body {
+      padding: 10px;
+      align-items: baseline !important;
+  }
+
+  .container {
+      align-self: center !important;
+  }
+
+  /*
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+#nav {
+  padding: 30px;
+}
+*/
+  .menu-list a {
+      color: hsl(0, 0%, 40%) !important;
+  }
+
+  .menu-list a.router-link-exact-active {
+      font-weight: bold !important;
+      color: #6f89a2 !important;
+      border-radius: 2px;
+  }
+
+  .menu-list a:focus,
+  .menu-list a:focus-within,
+  .menu-list a:hover {
+      background-color: #79ceed !important;
+      border-radius: 2px;
+  }
+
+  /* .navbar-end a:hover {
+    background-color: #79ceed;
+    border-radius: 2px;
+  } */
+
+  .hero.is-info,
+  .hero.is-info .title {
+      background-color: #c5e7f1;
+      color: hsl(0, 0%, 40%);
+
+  }
+
+  .box {
+      /* background-color: #c5e7f1; 
+    background-color: #60efdb;
+    color:#9dc2e5*/
+      background-color: #79ceed;
+  }
+
+  .is-success-light {
+      background-color: #60efdb
+  }

@@ -28,9 +28,9 @@ class UsuarioDataService {
         return http
             .put('usuario/'+ data.id,{
                 id: data.id,
-                cedula: data.username,
+                cedula: data.cedula,
                 email: data.email,
-                roles:[data.roles],
+                roles: data.roles,
                 decanato:data.decanato,
                 password: data.password,
                 estatus: data.estatus
@@ -46,7 +46,7 @@ class UsuarioDataService {
     /* RETORNA UNA LISTA DE USUARIOS */
     list(){
         return http
-            .get('usuario');
+            .get('usuario/activos');
     }
 
     /* RETORNA UNA LISTA DE USUARIOS */

@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card crear">
 
         <div class="card-content">
 
@@ -9,112 +9,99 @@
 
             <br>
 
-            <div class="field is-horizontal">
-                <div class="field-body">
+            <b-field grouped group-multiline>
 
-                    <div class="field">
-                        <label class="label">Tipo de Sesión:</label>
-                        <div class="control">
-                            <div class="select is-info is-fullwidth">
-                                <select v-model="acta.tipo_sesion">
-                                    <option value="o" selected>
-                                        Ordinaria
-                                    </option>
-                                    <option value="e" selected>
-                                        Extraordinaria
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <b-field label="Tipo de Sesión:" expanded>
+                        <b-select placeholder="Select un Tipo" v-model="acta.tipo_sesion" expanded required>
+                            <option value="o">
+                                Ordinaria
+                            </option>
+                            <option value="x">
+                                Extraordinaria
+                            </option>
+                        </b-select>
+                    </b-field>
 
-                    <div class="field">
-                        <label class="label">Fecha de la Sesión:</label>
-                        <div class="control">
-                            <input type="date" class="label">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="field is-horizontal">
-                <div class="field-body columns">
-
-                    <div class="field column is-6">
-                        <label class="label">Decanato:</label>
-                        <div class="control">
-                            <div class="select is-info is-fullwidth">
-                                <select v-model="acta.decanato.codigo">
-                                    <option v-for="item of decanatos" 
-                                        :key="item.codigo" :selected="item.codigo == 1" :value="item.codigo">
-                                        {{ item.nombre }} - {{ item.siglas }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="field column is-6">
-
-                        <label class="label">Archivo Acta:</label>
-
-                        <div class="control columns is-vcentered">
-
-                            <div class="file has-name column is-9" id="fileActa">
-                                <label class="file-label">
-                                    <input type="file" class="file-input" name="pdf" accept="application/pdf" @change="procesarDocumento">
-                                    <span class="file-cta">
-                                        <span class="file-icon">
-                                            <i class="fas fa-upload"></i>
-                                        </span>
-                                        <span class="file-label">
-                                            Adjunta PDF...
-                                        </span>
-                                    </span>
-                                    <span class="file-name">
-                                        No hay archivo cargado
-                                    </span>
-                                </label>
-                            </div>
-
-                            <div class="column is-2 has-text-centered">
-                                <button class="button is-info" :disabled="!pdfUpload" @click="mensajeConfirmacion('p')">Subir</button>
-                            </div>
-                        </div>
-                    </div>
-
+                    <b-field label="Fecha de la Sesión" expanded>
+                        <b-datepicker
+                            placeholder="Click aquí..."
+                            icon="calendar-today"
+                            trap-focus
+                            v-model="acta.fecha_sesion"
+                            dateFormat='YYYY-MM-DD'
+                            required>
+                        </b-datepicker>
+                    </b-field>
                     
+            </b-field>
 
-                </div>
-            </div>
+            <b-field grouped group-multiline>
 
-            <div class="field">
-                <label class="label">Resúmen:</label>
-                <div class="control">
-                    <textarea placeholder="Resúmen Acta" class="textarea" v-model="acta.resumen"></textarea>
-                </div>
-            </div>
+                    <b-field label="Decanato:" expanded v-if="this.roleUser.includes('ROLE_ADMIN')">
+                        <b-select placeholder="Seleccione el Decanato" v-model="acta.decanato.codigo" expanded required>
+                            <option v-for="item of decanatos" 
+                                :key="item.codigo" :selected="item.codigo == 1" :value="item.codigo">
+                                {{ item.nombre }} - {{ item.siglas }}
+                            </option>
+                        </b-select>
+                    </b-field>
 
-            <div class="field is-grouped is-grouped-centered">
+                    <b-field label="Decanato:" expanded v-else>
+                        <b-input v-model="acta.decanato.codigo" disabled></b-input>
+                    </b-field>
+
+                    <b-field label="Archivo Acta:" expanded>
+
+                        <b-field grouped group-multiline expanded>
+                            <b-field class="file">
+                                <b-upload v-model="pdfUpload" accept="application/pdf">
+                                    <a class="button is-primary">
+                                        <b-icon icon="upload"></b-icon>
+                                        <span>Click para cargar</span>
+                                    </a>
+                                </b-upload>
+                                <span class="file-name" v-if="pdfUpload">
+                                    {{ pdfUpload.name }}
+                                </span>
+                            </b-field>
+
+                            <div class="has-text-centered">
+                                <button class="button is-info" :disabled="!pdfUpload" @click="mensajeConfirmacion('p')" :loading="isLoading">Subir</button>
+                            </div>
+                        </b-field>
+                        
+                    </b-field>
+                    
+            </b-field>
+
+            <b-field label="Resúmen:">
+                <b-input type="textarea" v-model="acta.resumen"></b-input>
+            </b-field>
+
+            <b-field grouped group-multiline>
                 <p class="control">
-                    <button class="button is-success" :disabled="camposVacios" @click="mensajeConfirmacion('a')">
+                    <b-button @click="mensajeConfirmacion('a')"
+                        type="is-success" 
+                        icon-left="check"
+                        :disabled="camposVacios">
                         Registar
-                    </button>
+                    </b-button>
                 </p>
                 <p class="control">
-                    <button class="button is-warning" @click="vaciarCampos()" :disabled="acta.pdf">
+                    <b-button @click="vaciarCampos()"
+                        type="is-warning" 
+                        icon-left="close"
+                        :disabled="acta.pdf">
                         Cancelar
-                    </button>
+                    </b-button>
                 </p>
-            </div>
+            </b-field>
         </div>
 
     </div>
 </template>
 
 <script>
-    import bulmaCalendar from '../../../node_modules/bulma-calendar/dist/js/bulma-calendar';
     import ActaDataService from '../../services/ActaDataService'
     import DecanatoDataService from '../../services/DecanatoDataService'
     import Acta from '../../models/Acta'
@@ -124,9 +111,10 @@
         name: 'CreateActa',
         data() {
             return {
-                acta: new Acta('','o',new Date().toLocaleDateString(),null,'',1,'A'),
-                pdfUpload: false,
-                decanatos:[]
+                acta: new Acta('','o','',null,'',1,'A'),
+                pdfUpload: null,
+                decanatos:[],
+                isLoading: false
             }
         },
         computed:{
@@ -162,21 +150,6 @@
             }
         },
         mounted() {
-            const calendars = bulmaCalendar.attach('[type="date"]', {
-                type: 'date',
-                color: 'info',
-                lang: 'es',
-                startDate: new Date(this.acta.fecha_sesion),
-                dateFormat: 'YYYY-MM-DD'
-            });
-            
-            calendars.forEach(calendar => {
-                calendar.on('select', date => {
-                    this.acta.fecha_sesion = date.data.value();
-                    console.log(this.acta.fecha_sesion);
-                });
-            });
-
             /* SI EL USUARIO ESTA ACTIVO Y ES ADMIN CARGA TODOS LOS DECANATOS */
             if(this.currentUser && this.roleUser.includes('ROLE_ADMIN')){
                 DecanatoDataService
@@ -198,42 +171,10 @@
                     });
             } else if(this.currentUser && !this.roleUser.includes('ROLE_ADMIN')){
                 /* SINO CARAGA SOLO SU DECANATOS */
-                DecanatoDataService
-                    .list()
-                    .then(response => {
-                        this.decanatos = response.data
-                    }, error => {
-
-                        /* 
-                        *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
-                        */
-                    console.log(error);
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error
-                        });
-                    });
+                this.acta.decanato.codigo = this.decanatoUser()
             }
         },
         methods: {
-            /* METODO PARA PROCESAR EL PDF DEL INPUT */
-            procesarDocumento(event){
-                var file = event.target.files || event.dataTransfer.files;
-
-                /* VERIFICA SI HAY UN DOCUMENTO, SI NO HAY FINALIZA EL METODO */
-                if(!file.length){
-                    return
-                }
-
-                /* EN CASO CONTRARIO ALMACENA EL PDF EN UNA VARIBLE */  
-                var formData = new FormData();
-                formData.append('file', file[0]);
-
-                this.pdfUpload = formData;
-                $('#fileActa .file-name')[0].innerText = file[0].name;
-            },
 
             /* METODO QUE VACIA LOS CAMPOS */
             vaciarCampos() {
@@ -276,6 +217,13 @@
             /* METODO PARA REALIZAR EL REGISTRO */
             subirPDF() {
                 /* DE LA CLASE 'ActaDataService' LLAMA LA FUNCIÓN DE SUBIR PDF */
+                var formData = new FormData();
+                formData.append('file', this.pdfUpload);
+
+                this.pdfUpload = formData;
+
+                this.isLoading = true;
+
                  ActaDataService
                     .uploadPDF(this.pdfUpload)
                     .then(response => {
@@ -288,6 +236,8 @@
 
                         this.acta.pdf = response.data['fileId'];
 
+                        this.isLoading = false;
+
                         Swal.fire({
                             icon: 'success',
                             title: 'Se ha registrado con éxito',
@@ -298,7 +248,9 @@
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
                          *  Y MUESTRA UNA MODAL MOSTRANDO CUAL FUE EL ERROR
                          */
-
+                        
+                        this.isLoading = false;
+                        
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -353,11 +305,3 @@
 
     }
 </script>
-
-<style>
-    .datetimepicker-dummy-wrapper {
-        background-color: white;
-        border: 1px solid #3298dc !important;
-        border-radius: 4px;
-    }
-</style>

@@ -1,23 +1,38 @@
 <template>
-    <div class="container is-fluid">
-        <h3 class="title is-3 has-text-centered">
-            Gestionar Decanatos
-        </h3>
+    <section class="section">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title is-centered title is-4">
+                    <b-icon
+                        icon="domain"
+                        size="is-small"
+                        style="margin-right: 0.5em;">
+                    </b-icon>
+                    Gestionar Decanatos
+                </p>
+            </header>
+            
+            <div class="card-content">
+                <!-- SI NO ESTA REGISTRANDO, SOLO MUESTRA EL BOTON PARA REGISTRAR -->
+                <div class="has-text-centered" v-if="!register">
+                    <b-button @click="activarCampos()"
+                        icon-left="domain-plus"
+                        type="is-info">
+                        Registar Decanato
+                    </b-button>
+                </div>
 
-        <!-- SI NO ESTA REGISTRANDO, SOLO MUESTRA EL BOTON PARA REGISTRAR -->
-        <div class="has-text-centered" v-if="!register">
-            <button class="button is-info" @click="activarCampos()">Registar Decanato</button>
+                <!-- EN CASO CONTRARIO, ACTIVA LOS CAMPOS PARA REGISTRAR -->
+                <create-decanato v-else v-on:cancelar-registro="activarCampos"/>
+                <!-- 'v-on:cancelar-registro' ESPERA QUE EL COMPONENTE
+                    CREATE DECANATO EMITA LA SEÑAL DE CANCELAR, CUANDO ESTO PASA
+                    OCULTA LOS CAMPOS -->
+
+                <br>
+                <list-decanato />
+            </div>
         </div>
-
-        <!-- EN CASO CONTRARIO, ACTIVA LOS CAMPOS PARA REGISTRAR -->
-        <create-decanato v-else v-on:cancelar-registro="activarCampos"/>
-        <!-- 'v-on:cancelar-registro' ESPERA QUE EL COMPONENTE
-            CREATE DECANATO EMITA LA SEÑAL DE CANCELAR, CUANDO ESTO PASA
-            OCULTA LOS CAMPOS -->
-
-        <br>
-        <list-decanato />
-    </div>
+    </section>
 </template>
 
 <script>

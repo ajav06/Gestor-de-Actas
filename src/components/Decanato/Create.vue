@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card crear">
 
         <div class="card-content">
 
@@ -12,35 +12,34 @@
             <div class="field is-horizontal">
                 <div class="field-body">
 
-                    <div class="field">
-                        <label for="nombre" class="label">Nombre:</label>
-                        <div class="control">
-                            <input type="text" name="nombre" placeholder="Nombre Decanato" class="input" v-model="decanato.nombre">
-                        </div>
-                    </div>
+                    <b-field label="Nombre: ">
+                        <b-input v-model="decanato.nombre" placeholder="Nombre Decanato" required></b-input>
+                    </b-field>
 
-                    <div class="field">
-                        <label for="siglas" class="label">Siglas:</label>
-                        <div class="control">
-                            <input type="text" name="nombre" placeholder="Siglas Decanato" class="input" v-model="decanato.siglas">
-                        </div>
-                    </div>
+                    <b-field label="Siglas: ">
+                        <b-input v-model="decanato.siglas" placeholder="Siglas Decanato" required></b-input>
+                    </b-field>
 
                 </div>
             </div>
 
-            <div class="field is-grouped is-grouped-centered">
+            <b-field grouped group-multiline>
                 <p class="control">
-                    <button class="button is-success" :disabled="camposVacios" @click="mensajeConfirmacion()">
+                    <b-button @click="mensajeConfirmacion()"
+                        type="is-success" 
+                        icon-left="check"
+                        :disabled="camposVacios">
                         Registar
-                    </button>
+                    </b-button>
                 </p>
                 <p class="control">
-                    <button class="button is-warning" @click="vaciarCampos()">
+                    <b-button @click="vaciarCampos()"
+                        type="is-warning" 
+                        icon-left="close">
                         Cancelar
-                    </button>
+                    </b-button>
                 </p>
-            </div>
+            </b-field>
         </div>
 
     </div>
@@ -133,12 +132,12 @@
 </script>
 
 <style>
-    .title.is-4.has-text-centered {
+    /* .title.is-4.has-text-centered {
         background-color: #79ceed;
     }
 
     .card {
         border-radius: 1ex;
         background-color: #79ceed;
-    }
+    } */
 </style>

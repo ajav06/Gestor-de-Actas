@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card crear">
 
         <div class="card-content">
 
@@ -9,79 +9,61 @@
 
             <br>
 
-            <div class="field is-horizontal">
-                <div class="field-body">
+            <b-field grouped group-multiline>
 
-                    <div class="field">
-                        <label for="nombre" class="label">Cedula:</label>
-                        <div class="control">
-                            <input type="number" name="nombre" placeholder="Cedula Usuario" class="input" v-model="usuario.username">
-                        </div>
-                    </div>
+                <b-field label="Cedula: " expanded>
+                    <b-input type="number" v-model="usuario.username" placeholder="Cedula Usuario" required expanded></b-input>
+                </b-field>
 
-                    <div class="field">
-                        <label for="siglas" class="label">Contraseña:</label>
-                        <div class="control">
-                            <input type="text" name="nombre" placeholder="Contraseña Usuario" class="input" v-model="usuario.password">
-                        </div>
-                    </div>
+                <b-field label="Contraseña:" expanded>
+                    <b-input type="password" placeholder="Contraseña Usuario" v-model="usuario.password" required expanded password-reveal minlength="8"></b-input>
+                </b-field>
 
-                </div>
-            </div>
+            </b-field>
 
-            <div class="field is-horizontal">
-                <div class="field-body">
+            <b-field grouped group-multiline>
 
-                    <div class="field">
-                        <label for="nombre" class="label">Correo electronico:</label>
-                        <div class="control">
-                            <input type="email" name="nombre" placeholder="Correo Usuario" class="input" v-model="usuario.email">
-                        </div>
-                    </div>
+                <b-field label="Correo Electrónico: " expanded>
+                    <b-input type="email" v-model="usuario.email" placeholder="Email Usuario" required expanded></b-input>
+                </b-field>
 
-                    <div class="field">
-                        <label for="siglas" class="label">Decanato:</label>
-                        <div class="control">
-                            <div class="select is-info is-fullwidth">
-                                <select v-model="usuario.decanato_id">
-                                    <option v-for="item of decanatos" 
-                                        :key="item.codigo" :selected="item.codigo == usuario.decanato_id" :value="item.codigo">
-                                        {{ item.nombre }} - {{ item.siglas }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <b-field label="Decanato:" expanded>
+                    <b-select placeholder="Seleccione el Decanato" v-model="usuario.decanato_id" expanded required>
+                        <option v-for="item of decanatos" 
+                            :key="item.codigo" :selected="item.codigo == 1" :value="item.codigo">
+                            {{ item.nombre }} - {{ item.siglas }}
+                        </option>
+                    </b-select>
+                </b-field>
 
-                    <div class="field">
-                        <label for="siglas" class="label">Rol:</label>
-                        <div class="control">
-                            <div class="select is-info is-fullwidth">
-                                <select v-model="usuario.rol">
-                                    <option v-for="item of roles" 
-                                        :key="item.id" :selected="item.id == usuario.rol" :value="item.id">
-                                        {{ item.rol }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <b-field label="Rol:" expanded>
+                    <b-select placeholder="Seleccione el Rol" v-model="usuario.rol" expanded required>
+                        <option v-for="item of roles" 
+                            :key="item.codigo" :selected="item.id == 1" :value="item.id">
+                            {{ item.rol }}
+                        </option>
+                    </b-select>
+                </b-field>
 
-                </div>
-            </div>
+            </b-field>
 
-            <div class="field is-grouped is-grouped-centered">
+            <b-field grouped group-multiline>
                 <p class="control">
-                    <button class="button is-success" :disabled="camposVacios" @click="mensajeConfirmacion()">
+                    <b-button @click="mensajeConfirmacion()"
+                        type="is-success" 
+                        icon-left="check"
+                        :disabled="camposVacios">
                         Registar
-                    </button>
+                    </b-button>
                 </p>
                 <p class="control">
-                    <button class="button is-warning" @click="vaciarCampos()">
+                    <b-button @click="vaciarCampos()"
+                        type="is-warning" 
+                        icon-left="close">
                         Cancelar
-                    </button>
+                    </b-button>
                 </p>
-            </div>
+            </b-field>
         </div>
 
     </div>
@@ -140,7 +122,7 @@
             /* ESTE ES UN METODO QUE SIEMPRE ESTA ACTIVO, VERIFICANDO QUE LOS 
                CAMPOS ESTAN VACIOS O NO */
             camposVacios() {
-                if (this.usuario.username && this.usuario.password )
+                if (this.usuario.username && this.usuario.password.length >= 8 && this.usuario.email)
                     return false;
 
                 return true;
@@ -211,14 +193,3 @@
 
     }
 </script>
-
-<style>
-    .title.is-4.has-text-centered {
-        background-color: #79ceed;
-    }
-
-    .card {
-        border-radius: 1ex;
-        background-color: #79ceed;
-    }
-</style>
