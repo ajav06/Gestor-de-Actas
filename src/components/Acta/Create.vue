@@ -29,6 +29,7 @@
                             trap-focus
                             v-model="acta.fecha_sesion"
                             dateFormat='YYYY-MM-DD'
+                            :max-date="maxDate"
                             required>
                         </b-datepicker>
                     </b-field>
@@ -120,10 +121,11 @@
         name: 'CreateActa',
         data() {
             return {
-                acta: new Acta('','o','',null,'',1,'A'),
+                acta: new Acta('','o',new Date(),null,'',1,'A'),
                 pdfUpload: null,
                 pdfName: null,
                 decanatos:[],
+                maxDate: new Date(),
                 loading: false
             }
         },

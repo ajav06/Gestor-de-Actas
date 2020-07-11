@@ -29,6 +29,7 @@
                                 icon="calendar-today"
                                 trap-focus
                                 v-model="acta.fecha_sesion"
+                                :max-date="maxDate"
                                 dateFormat='YYYY-MM-DD'
                                 required>
                             </b-datepicker>
@@ -88,6 +89,7 @@
             return {
                 id: this.$route.params.id,
                 acta: new Acta(),
+                maxDate: new Date(),
                 pdfUpload: null,
                 decanatos:[],
             }
@@ -137,7 +139,12 @@
                         *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                         */
                         this.acta = response.data;
+
                         this.acta.fecha_sesion = new Date(Date.parse(this.acta.fecha_sesion));
+                        this.acta.fecha_sesion = new Date(this.acta.fecha_sesion.getFullYear(), this.acta.fecha_sesion.getMonth(), this.acta.fecha_sesion.getDate() + 1);
+
+                        this.maxDate = new Date(Date.parse(this.acta.fecha_creacion));
+                        this.maxDate = new Date(this.maxDate.getFullYear(), this.maxDate.getMonth(), this.maxDate.getDate() + 1);
                     }, error => {
                         /* Y SI HUBO UN ERROR
                         *  CAPTURA LA RESPUETA DEL ERROR LA API

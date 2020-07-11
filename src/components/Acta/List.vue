@@ -31,7 +31,15 @@
                     {{ props.row.tipo_sesion=='x' ? 'Extraordinario' : 'Ordinaria' }}
                 </b-table-column>
 
-                <b-table-column field="fecha" label="Fecha Sesión" sortable>
+                <b-table-column field="fecha_creacion" label="Fecha Creación" sortable>
+                    {{ props.row.fecha_creacion }}
+                </b-table-column>
+
+                <b-table-column field="fecha_actualizacion" label="Fecha Actualización" sortable>
+                    {{ props.row.fecha_actualizacion }}
+                </b-table-column>
+
+                <b-table-column field="fecha_sesion" label="Fecha Sesión" sortable>
                     {{ props.row.fecha_sesion }}
                 </b-table-column>
 
