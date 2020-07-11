@@ -3,20 +3,21 @@
         <div class="hero-body">
             <div class="container">
                 <div class="columns is-centered">
-                    <div class="column is-7-tablet is-5-desktop is-5-widescreen">
+                    <div class="column is-9-tablet is-7-desktop is-5-widescreen is-12-mobile">
                         <form action="" class="box">
 
-                            <h4 class="subtitle is-4 has-text-centered has-text-grey-dark">Inicar sesión</h4>
+                            <h3 class="title is-3 has-text-centered has-text-grey-dark">Gestor de Actas</h3>
+                            <h5 class="subtitle is-5 has-text-centered has-text-grey-dark">Inicar sesión</h5>
 
                             <hr>
 
                             <b-field>
-                                <b-input placeholder="Nombre de Usuario" 
+                                <b-input placeholder="Cedula del Usuario" 
                                         v-model="user.username" required></b-input>
                             </b-field>
 
                             <b-field>
-                                <b-input placeholder="Contraseña de Usuario"
+                                <b-input placeholder="Contraseña del Usuario"
                                     type="password" 
                                         v-model="user.password" required></b-input>
                             </b-field>
@@ -25,7 +26,9 @@
                                 <b-button @click="loginA()"
                                     type="is-success" 
                                     icon-left="login"
-                                    :disabled="camposVacios" expanded>
+                                    :disabled="camposVacios"
+                                    :loading="loading" 
+                                    expanded>
                                     Iniciar Sesión
                                 </b-button>
                             </b-field>
@@ -72,8 +75,10 @@
         },
         methods: {
             loginA() {
+                this.loading = true;
                 this.$store.dispatch('auth/login', this.user)
                     .then(() => {
+                        this.loading = false;
                         this.$router.push('/actas');
                     });
                 this.user = new Usuario('', '', '');
@@ -83,15 +88,16 @@
 </script>
 
 <style lang="scss">
-    @media screen and (min-width: 1024px) {
-        #login {
-            margin-right: 14rem !important;
-        }
+   
+  @media screen and (min-width: 1024px) {
+    #login {
+      margin-left: -14rem !important;
     }
+  }
 
   @media screen and (max-width: 1023px) {
     #login {
-      margin-right: 4.5em !important;
+      margin-left: -4.5em !important;
     }
   }
 </style>

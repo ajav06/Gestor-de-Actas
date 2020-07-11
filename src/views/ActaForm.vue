@@ -49,7 +49,7 @@
                         
                 </b-field>
 
-                <b-field label="Resúmen:">
+                <b-field label="Resumen:">
                     <b-input type="textarea" v-model="acta.resumen"></b-input>
                 </b-field>
 
@@ -168,7 +168,6 @@
                         /* 
                         *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                         */
-                    console.log(error);
 
                         Swal.fire({
                             icon: 'error',
@@ -201,12 +200,22 @@
                          *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Se ha actualizado con éxito',
-                        }).then(result => {
-                            this.$router.push('/actas');
-                        });
+                        let message = response.data;
+
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ha actualizado con éxito',
+                            }).then(result => {
+                                this.$router.push('/actas');
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
                     }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API

@@ -1,6 +1,8 @@
 <template>
     <div>
         <b-select v-model="perPage" :disabled="!isPaginated">
+            <option value="2">2 por Páginas</option>
+            <option value="3">3 por Páginas</option>
             <option value="5">5 por Páginas</option>
             <option value="10">10 por Páginas</option>
             <option value="15">15 por Páginas</option>
@@ -70,7 +72,7 @@
                 sortIcon: 'arrow-up',
                 sortIconSize: 'is-small',
                 currentPage: 1,
-                perPage: 5
+                perPage: 3
             }
         },
         mounted(){
@@ -84,7 +86,6 @@
                     /* 
                     *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                     */
-                   console.log(error);
 
                     Swal.fire({
                         icon: 'error',
@@ -105,15 +106,25 @@
                          *  CAPTURA LA RESPUETA DE LA API
                          *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
+                        let message = response.data;
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Decanato eliminado con éxito.'
-                        }).then(result => {
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Decanato eliminado con éxito.'
+                            }).then(result => {
 
-                            window.location.reload(false);
+                                window.location.reload(false);
 
-                        });
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
+                        
                     }, error => {
 
                         /* Y SI HUBO UN ERROR

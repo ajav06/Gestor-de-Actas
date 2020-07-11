@@ -1,6 +1,10 @@
 <template>
     <b-sidebar :fullheight="true" type="is-light" position="absolute" :mobile="mobile" :expand-on-hover="true"
          open v-show="currentUser">
+        <span class="has-text-centered">
+            <b>Gestor</b> Actas
+        </span>
+        <hr>
         <b-menu class="is-custom-mobile">
             <b-menu-list label="General">
                 <b-menu-item icon="home" label="Inicio" tag="router-link" to="/reportes" v-if="showAdmin"></b-menu-item>

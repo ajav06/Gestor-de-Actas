@@ -147,13 +147,22 @@
                         *  CAPTURA LA RESPUETA DE LA API
                         *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                         */
+                        let message = response.data;
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Se ha registrado con éxito',
-                        }).then(result => {
-                            window.location.reload(false);
-                        });
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ha registrado con éxito',
+                            }).then(result => {
+                                window.location.reload(false);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
                     }, error => {
                         /* Y SI HUBO UN ERROR
                         *  CAPTURA LA RESPUETA DEL ERROR LA API
@@ -173,7 +182,7 @@
 
                 Swal.fire({
                     icon: 'question',
-                    title: 'Registrar Decanato',
+                    title: 'Registrar Usuario',
                     text: '¿Desea registrar el usuario?',
                     showCancelButton: true,
                     cancelButtonColor: '#d33',

@@ -202,12 +202,22 @@
                          *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Se ha actualizado con éxito',
-                        }).then(result => {
-                            this.$router.push('/usuarios');
-                        });
+                        let message = response.data;
+
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ha actualizado con éxito',
+                            }).then(result => {
+                                this.$router.push('/usuarios');
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
                     }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API

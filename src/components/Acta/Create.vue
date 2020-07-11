@@ -50,7 +50,7 @@
                         <b-input v-model="acta.decanato.codigo" disabled></b-input>
                     </b-field>
 
-                    <b-field label="Archivo Acta:" expanded>
+                    <b-field label="Archivo Acta:" expanded v-if="!acta.pdf">
 
                         <b-field grouped group-multiline expanded>
                             <b-field class="file">
@@ -66,15 +66,24 @@
                             </b-field>
 
                             <div class="has-text-centered">
-                                <button class="button is-info" :disabled="!pdfUpload" @click="mensajeConfirmacion('p')" :loading="isLoading">Subir</button>
+                                <b-button class="button is-info" 
+                                    :disabled="!pdfUpload" 
+                                    @click="mensajeConfirmacion('p')" 
+                                    :loading="loading" >
+                                    Subir
+                                </b-button>
                             </div>
                         </b-field>
                         
                     </b-field>
+
+                    <b-field label="Archivo Acta:" expanded v-else>
+                        <b-input disabled v-model="pdfName"></b-input>
+                    </b-field>
                     
             </b-field>
 
-            <b-field label="Resúmen:">
+            <b-field label="Resumen:">
                 <b-input type="textarea" v-model="acta.resumen"></b-input>
             </b-field>
 
@@ -113,8 +122,9 @@
             return {
                 acta: new Acta('','o','',null,'',1,'A'),
                 pdfUpload: null,
+                pdfName: null,
                 decanatos:[],
-                isLoading: false
+                loading: false
             }
         },
         computed:{
@@ -161,7 +171,6 @@
                         /* 
                         *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                         */
-                    console.log(error);
 
                         Swal.fire({
                             icon: 'error',
@@ -193,13 +202,23 @@
                          *  CAPTURA LA RESPUETA DE LA API
                          *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
+                        
+                        let message = response.data;
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Se ha registrado con éxito',
-                        }).then(result => {
-                            window.location.reload(false);
-                        });
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ha registrado con éxito',
+                            }).then(result => {
+                                window.location.reload(false);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
                     }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API
@@ -221,8 +240,6 @@
                 formData.append('file', this.pdfUpload);
 
                 this.pdfUpload = formData;
-
-                this.isLoading = true;
 
                  ActaDataService
                     .uploadPDF(this.pdfUpload)
@@ -295,6 +312,8 @@
 
                         /* SI PRESIONA LA OPCIÓN 'SÍ' ACTIVA EL METODO DE GUARDAR EL PDF DEL ACTA */
                         if (result.value) {
+                            this.loading = true;
+                            this.pdfName = this.pdfUpload.name;
                             this.subirPDF();
                         }
                     });

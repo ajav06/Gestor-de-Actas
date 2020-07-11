@@ -85,12 +85,22 @@
                          *  Y MUESTRA UNA MODAL CONFIRMANDOLO Y LUEGO RECARGA LA PÁGINA
                          */
 
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Se ha registrado con éxito',
-                        }).then(result => {
-                            window.location.reload(false);
-                        });
+                        let message = response.data;
+
+                        if(message['message'] == 'exito'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Se ha registrado con éxito',
+                            }).then(result => {
+                                window.location.reload(false);
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: message['message']
+                            });
+                        }
                     }, error => {
                         /* Y SI HUBO UN ERROR
                          *  CAPTURA LA RESPUETA DEL ERROR LA API

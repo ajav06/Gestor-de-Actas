@@ -33,12 +33,15 @@ class AuthService {
                 /* 
                 *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                 */
-               console.log(error);
+                var message = error.response.data.error;
+
+                if (message = 'Unauthorized')
+                    message = 'Credenciales erróneas'                
 
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'info',
                     title: 'Error',
-                    text: error.response.data.error
+                    text: message
                 });
     
             });

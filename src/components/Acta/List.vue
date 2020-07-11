@@ -1,6 +1,8 @@
 <template>
     <div>
         <b-select v-model="perPage" :disabled="!isPaginated">
+            <option value="2">2 por Páginas</option>
+            <option value="3">3 por Páginas</option>
             <option value="5">5 por Páginas</option>
             <option value="10">10 por Páginas</option>
             <option value="15">15 por Páginas</option>
@@ -33,7 +35,7 @@
                     {{ props.row.fecha_sesion }}
                 </b-table-column>
 
-                <b-table-column field="resumen" label="Resúmen" sortable>
+                <b-table-column field="resumen" label="Resumen" sortable>
                     {{ props.row.resumen }}
                 </b-table-column>
 
@@ -46,17 +48,19 @@
 
                         <b-button @click="mensajeConfirmacion('d', props.row.pdf)"
                             type="is-warning" 
-                            icon-left="folder-download">
+                            icon-left="folder-download"
+                            expanded>
                             PDF
                         </b-button>
 
-                        <router-link :to="{name:'Acta.edit', params: {id: props.row.codigo}}" class="button is-info">
+                        <router-link :to="{name:'Acta.edit', params: {id: props.row.codigo}}" class="button is-info is-fullwidth">
                             <b-icon icon="border-color"/> <span>Modificar</span>
                         </router-link>
 
                         <b-button @click="mensajeConfirmacion('e', props.row.codigo)"
                             type="is-danger" 
-                            icon-left="delete">
+                            icon-left="delete"
+                            expanded>
                             Eliminar
                         </b-button>
 
@@ -88,7 +92,7 @@
                 sortIcon: 'arrow-up',
                 sortIconSize: 'is-small',
                 currentPage: 1,
-                perPage: 5
+                perPage: 3
             }
         },
         computed:{

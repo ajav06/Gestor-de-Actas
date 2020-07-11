@@ -1,6 +1,8 @@
 <template>
     <div>
         <b-select v-model="perPage" :disabled="!isPaginated">
+            <option value="2">2 por Páginas</option>
+            <option value="3">3 por Páginas</option>
             <option value="5">5 por Páginas</option>
             <option value="10">10 por Páginas</option>
             <option value="15">15 por Páginas</option>
@@ -78,7 +80,7 @@
                 sortIcon: 'arrow-up',
                 sortIconSize: 'is-small',
                 currentPage: 1,
-                perPage: 5
+                perPage: 3
             }
         },
         mounted(){
@@ -91,7 +93,6 @@
                     /* 
                     *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                     */
-                   console.log(error);
 
                     Swal.fire({
                         icon: 'error',

@@ -70,7 +70,6 @@
                     /* 
                     *  SI HAY UN ERROR LO CAPTURA Y LO MUESTRA EN UNA MODAL
                     */
-                   console.log(error);
 
                     Swal.fire({
                         icon: 'error',
