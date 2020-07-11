@@ -103,7 +103,6 @@
             calendars.forEach(calendar => {
                 calendar.on('select', date => {
                     this.item.fecha_sesion = date.data.value()
-                    console.log(this.item.fecha_sesion);
                 });
             });
         },

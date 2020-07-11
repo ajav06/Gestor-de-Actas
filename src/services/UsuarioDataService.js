@@ -11,7 +11,6 @@ class UsuarioDataService {
 
     /* CREA UN NUEVO USUARIO ADMIN */
     create(data){
-        console.log(data);
         return http
             .post('usuario',{
                 cedula: data.username,
@@ -24,7 +23,6 @@ class UsuarioDataService {
 
     /* ACTUALIZA UN USUARIO EN ESPECÍFICO */
     update(data){
-        console.log(data);
         return http
             .put('usuario/'+ data.id,{
                 id: data.id,
