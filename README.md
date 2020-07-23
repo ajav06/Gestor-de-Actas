@@ -8,6 +8,7 @@ JavaEE con Spring: Desplegado en Heroku.
 
 ## Front-End:
 * VueJS.
+* Axios.
 * Buefy.
 * SweetAlert 2
 
